@@ -1,6 +1,6 @@
 <?php
 include "models/Logs.php";
-
+include "models/User.php";
 $method = $_SERVER["REQUEST_METHOD"];
 
 if(isset($_SERVER['PATH_INFO']))
@@ -30,10 +30,22 @@ if(isset($request[0])&&($request[0]=='logs')) {
 
     }
 }
+if(isset($request[0])&&($request[0]=='user')){
+    switch ($method) {
+        case 'GET':
+            //vrni oglas
+
+        case 'POST':
+            parse_str(file_get_contents('php://input'), $input);
+            if (isset($input)) {
+                $user = new User( $input["username"], $input["password"],$input["email"]);
+                $user->dodaj();
+            }
+    }
+}
 
 //nastavimo glave odgovora tako, da brskalniku sporočimo, da mu vračamo json
 header('Content-Type: application/json');
 //omgočimo zahtevo iz različnih domen
 header("Access-Control-Allow-Origin: *");
 //izpišemo oglas, ki smo ga prej ustrezno nastavili
-echo json_encode($logs);
