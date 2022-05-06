@@ -28,4 +28,16 @@ class User
 
         $this->id=mysqli_insert_id($db);
     }
+    public static function login($username,$password) {
+
+        $db = Db::getInstance();
+
+        if($result = mysqli_query($db, "SELECT * FROM User WHERE username='test' AND password='test'")) {
+            while ($row = $result->fetch_assoc()) {
+                $user = new User($row["username"], $row["password"], $row["email"]);
+                return $user;
+            }
+        }
+
+    }
 }
