@@ -86,6 +86,12 @@ if(isset($request[0])&&($request[0]=='paketnik')) {
                 Paketnik::izbrisi($paketnikId);
             }
             break;
+        case 'POST':
+            parse_str(file_get_contents('php://input'), $input);
+            if(isset($input)) {
+                $paketnik = new Paketnik($input["paketnikId"]);
+                $paketnik->dodaj();
+            }
     }
 }
 
