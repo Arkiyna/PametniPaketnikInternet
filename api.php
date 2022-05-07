@@ -1,6 +1,7 @@
 <?php
 include "models/Logs.php";
 include "models/User.php";
+include "models/UserPaketnik.php";
 $method = $_SERVER["REQUEST_METHOD"];
 
 if(isset($_SERVER['PATH_INFO']))
@@ -50,6 +51,19 @@ if(isset($request[0])&&($request[0]=='user')){
                 $user = User::login($input["username"],$input["password"]);
                 echo json_encode($user);
             }
+    }
+}
+
+if(isset($request[0])&&($request[0]=='uporabnikPaketnik')) {
+    switch ($method) {
+        case 'DELETE':
+            //http://localhost/PametniPaketnikInternet/api.php/uporabnikPaketnik/userId/paketnikId
+            if(isset($request[1]) && isset($request[2])) {
+                $userId = $request[1];
+                $paketnikId = $request[2];
+                UserPaketnik::izbrisi($userId, $paketnikId);
+            }
+            break;
     }
 }
 
