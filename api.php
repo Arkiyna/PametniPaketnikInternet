@@ -62,8 +62,17 @@ if(isset($request[0])&&($request[0]=='uporabnikPaketnik')) {
                 $userId = $request[1];
                 $paketnikId = $request[2];
                 UserPaketnik::izbrisi($userId, $paketnikId);
+
             }
             break;
+        case 'POST':
+            parse_str(file_get_contents('php://input'), $input);
+            if(isset($input)) {
+                $paketnik = new UserPaketnik($input["userId"], $input["paketnikId"], $input["name"]);
+                $paketnik->dodaj();
+            }
+
+
     }
 }
 
