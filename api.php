@@ -2,6 +2,8 @@
 include "models/Logs.php";
 include "models/User.php";
 include "models/UserPaketnik.php";
+include "models/Paketnik.php";
+
 $method = $_SERVER["REQUEST_METHOD"];
 
 if(isset($_SERVER['PATH_INFO']))
@@ -32,6 +34,7 @@ if(isset($request[0])&&($request[0]=='logs')) {
 
     }
 }
+
 if(isset($request[0])&&($request[0]=='user')){
     switch ($method) {
         case 'GET':
@@ -71,10 +74,21 @@ if(isset($request[0])&&($request[0]=='uporabnikPaketnik')) {
                 $paketnik = new UserPaketnik($input["userId"], $input["paketnikId"], $input["name"]);
                 $paketnik->dodaj();
             }
-
-
     }
 }
+
+if(isset($request[0])&&($request[0]=='paketnik')) {
+    switch ($method) {
+        case 'DELETE':
+            //http://localhost/PametniPaketnikInternet/api.php/paketnik/paketnikId
+            if(isset($request[1])) {
+                $paketnikId = $request[1];
+                Paketnik::izbrisi($paketnikId);
+            }
+            break;
+    }
+}
+
 
 //nastavimo glave odgovora tako, da brskalniku sporočimo, da mu vračamo json
 header('Content-Type: application/json');
