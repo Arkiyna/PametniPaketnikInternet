@@ -71,8 +71,14 @@ if(isset($request[0])&&($request[0]=='uporabnikPaketnik')) {
         case 'POST':
             parse_str(file_get_contents('php://input'), $input);
             if(isset($input)) {
-                $paketnik = new UserPaketnik($input["userId"], $input["paketnikId"], $input["name"]);
-                $paketnik->dodaj();
+                if(isset($input["accessTill"]) && isset($input["newUserId"])) {
+                    $paketnik = new UserPaketnik($input["userId"], $input["paketnikId"], $input["name"], $input["accessTill"], $input["newUserId"]);
+                    $paketnik->dodaj();
+                }
+                else {
+                    $paketnik = new UserPaketnik($input["userId"], $input["paketnikId"], $input["name"]);
+                    $paketnik->dodaj();
+                }
             }
     }
 }
