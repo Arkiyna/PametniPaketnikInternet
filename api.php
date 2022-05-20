@@ -31,18 +31,11 @@ if(isset($request[0])&&($request[0]=='logs')) {
                 $logs = new Logs($input["userId"], $input["paketnikId"]);
                 $logs->dodaj();
             }
-
     }
 }
 
 if(isset($request[0])&&($request[0]=='user')){
     switch ($method) {
-        case 'GET':
-            if (isset($request[1]) && $request[1] == 'login') {
-                $userId = $request[2];
-                $paketnikId = $request[3];
-                $logs = Logs::zgodovinaOdklepov($userId, $paketnikId);
-            }
         case 'POST':
             parse_str(file_get_contents('php://input'), $input);
             if (isset($input) && isset($request[1]) && $request[1] == 'register' ) {
@@ -50,7 +43,6 @@ if(isset($request[0])&&($request[0]=='user')){
                 $user->dodaj();
             }
             if (isset($input) && isset($request[1]) && $request[1] == 'login' ) {
-
                 $user = User::login($input["username"],$input["password"]);
                 echo json_encode($user);
             }
@@ -79,6 +71,12 @@ if(isset($request[0])&&($request[0]=='uporabnikPaketnik')) {
                     $paketnik = new UserPaketnik($input["userId"], $input["paketnikId"], $input["name"]);
                     $paketnik->dodaj();
                 }
+            }
+        case 'GET':
+            if (isset($request[1]) && $request[1] == 'dostop') {
+                $userId = $request[2];
+                $paketnikId = $request[3];
+                echo UserPaketnik::paketnik_exists($userId, $paketnikId);
             }
     }
 }

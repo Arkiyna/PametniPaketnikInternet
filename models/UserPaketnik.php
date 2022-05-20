@@ -20,12 +20,14 @@ class UserPaketnik
         $this->accessTill = $accessTill;
     }
 
-    function paketnik_exists($userId,$paketnikId){
+    public static function paketnik_exists($userId,$paketnikId){
         $db = Db::getInstance();
+        date_default_timezone_set('Europe/Ljubljana');
 
-        $query = "SELECT * FROM User_Paketnik WHERE userId='$userId' AND paketnikId = '$paketnikId'";
+        $date = Date('Y-m-d H:i:s');
+        $query = "SELECT * FROM User_Paketnik WHERE userId='$userId' AND paketnikId = '$paketnikId' AND accessTil > '$date'";
         $res = $db->query($query);
-        return mysqli_num_rows($res) > 0;
+        return mysqli_num_rows($res) > 0 ? "true" : "false";
     }
 
     function isPaketnikOwner($userId, $paketnikId) {

@@ -47,7 +47,7 @@ class User
 
         if($result = mysqli_query($db, "SELECT * FROM User WHERE username='$username' AND password='$password'")) {
             while ($row = $result->fetch_assoc()) {
-                $user = new User($row["username"], $row["password"], $row["email"]);
+                $user = new User($row["username"], $row["password"], $row["email"], $row["id"]);
                 return $user;
             }
         }
