@@ -75,14 +75,6 @@ if(isset($request[0])&&($request[0]=='uporabnikPaketnik')) {
                     $paketnik->dodaj();
                 }
             }
-        case 'UPDATE':
-            if(isset($request[1]) && isset($request[2]) && isset($request[3])) {
-                $userId = $request[1];
-                $paketnikId = $request[2];
-                $name = $request[3];
-                UserPaketnik::spremeniIme($userId, $paketnikId, $name);
-            }
-            break;
         case 'GET':
             //https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/uporabnikPaketnik/dostop/userId/paketnikId
             if (isset($request[1]) && $request[1] == 'dostop') {
@@ -98,8 +90,15 @@ if(isset($request[0])&&($request[0]=='uporabnikPaketnik')) {
                     $userId = $request[2];
                     $paketnikId = $request[3];
                     UserPaketnik::izbrisi($userId, $paketnikId);
-
                 }
+            } else if ((isset($request[1]) && $request[1] == 'spremeniIme')) { //https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/uporabnikPaketnik/spremeniIme/userId/paketnikId/name
+                if(isset($request[2]) && isset($request[3])&& isset($request[4])) {
+                    $userId = $request[2];
+                    $paketnikId = $request[3];
+                    $name = $request[4];
+                    UserPaketnik::spremeniIme($userId, $paketnikId, $name);
+                }
+                break;
             }
     }
 }
