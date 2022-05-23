@@ -72,11 +72,24 @@ if(isset($request[0])&&($request[0]=='uporabnikPaketnik')) {
                     $paketnik->dodaj();
                 }
             }
+        case 'UPDATE':
+            if(isset($request[1]) && isset($request[2]) && isset($request[3])) {
+                $userId = $request[1];
+                $paketnikId = $request[2];
+                $name = $request[3];
+                UserPaketnik::spremeniIme($userId, $paketnikId, $name);
+            }
+            break;
         case 'GET':
+            //https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/uporabnikPaketnik/dostop/userId/paketnikId
             if (isset($request[1]) && $request[1] == 'dostop') {
                 $userId = $request[2];
                 $paketnikId = $request[3];
                 echo UserPaketnik::paketnik_exists($userId, $paketnikId);
+            } else if ((isset($request[1]) && $request[1] == 'getAll')) {
+                $userId = $request[2];
+                $paketniki = UserPaketnik::getUsersPackets($userId);
+                echo json_encode($paketniki);
             }
     }
 }
@@ -101,8 +114,8 @@ if(isset($request[0])&&($request[0]=='paketnik')) {
 
 
 //nastavimo glave odgovora tako, da brskalniku sporočimo, da mu vračamo json
-header('Content-Type: application/json');
+//header('Content-Type: application/json');
 //omgočimo zahtevo iz različnih domen
-header("Access-Control-Allow-Origin: *");
+//header("Access-Control-Allow-Origin: *");
 //izpišemo oglas, ki smo ga prej ustrezno nastavili
 
