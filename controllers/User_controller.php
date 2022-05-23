@@ -8,8 +8,27 @@ class user_controller {
     }
 
     public function shrani() {
-        $uporabnik=Uporabnik::dodaj($_POST["username"], $_POST["password"], $_POST["email"],$_POST["birthDate"]);
-        require_once('views/uporabnik/index.php'); //REDIRECT NA LOGIN.PHP
+        if($_POST["username"]!=""&&$_POST["password"]!=""&&$_POST["email"]!=""&&$_POST["birthDate"]!="") {
+            $url = 'https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/user/register';
+            $data = array('username' => $_POST["username"], 'password' => $_POST["password"], 'email' => $_POST["email"], 'birthDate' => $_POST["birthDate"]);
+
+            $options = array(
+                'http' => array(
+                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method' => 'POST',
+                    'content' => http_build_query($data)
+                )
+            );
+            $context = stream_context_create($options);
+            $result = file_get_contents($url, false, $context);
+            if ($result === FALSE) {
+                die();
+            }
+            require_once('views/uporabnik/prijava.php');
+        }
+        else{
+            echo "Registracijski podatki niso ustrezno izpolnjeni";
+        }
     }
 
     public function prijava(){
