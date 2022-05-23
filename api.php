@@ -63,9 +63,12 @@ if(isset($request[0])&&($request[0]=='uporabnikPaketnik')) {
         case 'POST':
             parse_str(file_get_contents('php://input'), $input);
             if(isset($input)) {
-                if(isset($input["accessTill"]) && isset($input["newUserId"])) {
-                    $paketnik = new UserPaketnik($input["userId"], $input["paketnikId"], $input["name"], $input["accessTill"], $input["newUserId"]);
-                    $paketnik->dodaj();
+                if(isset($input["accessTill"]) && isset($input["username"])) {
+                    $newUserId = UserPaketnik::getIdFromUsername($input["username"]);
+                    if($newUserId != -1) {
+                        $paketnik = new UserPaketnik($input["userId"], $input["paketnikId"], $input["name"], $input["accessTill"],0, 0, $newUserId);
+                        $paketnik->dodaj();
+                    }
                 }
                 else {
                     $paketnik = new UserPaketnik($input["userId"], $input["paketnikId"], $input["name"]);
@@ -90,6 +93,13 @@ if(isset($request[0])&&($request[0]=='uporabnikPaketnik')) {
                 $userId = $request[2];
                 $paketniki = UserPaketnik::getUsersPackets($userId);
                 echo json_encode($paketniki);
+            } else if ((isset($request[1]) && $request[1] == 'izbrisi')) { //https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/uporabnikPaketnik/izbrisi/userId/paketnikId
+                if(isset($request[1]) && isset($request[2])) {
+                    $userId = $request[2];
+                    $paketnikId = $request[3];
+                    UserPaketnik::izbrisi($userId, $paketnikId);
+
+                }
             }
     }
 }
@@ -109,6 +119,13 @@ if(isset($request[0])&&($request[0]=='paketnik')) {
                 $paketnik = new Paketnik($input["paketnikId"]);
                 $paketnik->dodaj();
             }
+        case 'GET':
+            //http://localhost/PametniPaketnikInternet/api.php/paketnik/izbrisi/paketnikId
+            if(isset($request[1]) && $request[1] == 'izbrisi') {
+                $paketnikId = $request[2];
+                Paketnik::izbrisi($paketnikId);
+            }
+            break;
     }
 }
 

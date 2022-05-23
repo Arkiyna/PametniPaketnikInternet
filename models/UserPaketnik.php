@@ -29,6 +29,15 @@ class UserPaketnik {
         return mysqli_num_rows($res) > 0;
     }
 
+    public static function getIdFromUsername($username) {
+        $db = Db::getInstance();
+        if($result = mysqli_query($db, "SELECT id FROM User WHERE username = '$username'")) {
+            $row = $result->fetch_assoc();
+            return $row["id"];
+        }
+        return -1;
+    }
+
     function isPaketnikOwner($userId, $paketnikId) {
         $db = Db::getInstance();
 
