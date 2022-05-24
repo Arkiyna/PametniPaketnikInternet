@@ -132,7 +132,7 @@ class UserPaketnik {
     public static function spremeniIme($userId, $paketnikId, $name) {
         $db = Db::getInstance();
 
-        if(mysqli_query($db, "UPDATE User_Paketnik SET name = $name WHERE userId = '$userId' AND paketnikId = '$paketnikId'")) {
+        if(mysqli_query($db, "UPDATE User_Paketnik SET name = '$name' WHERE userId = '$userId' AND paketnikId = '$paketnikId'")) {
             echo "Paketnik z ID-jem '$paketnikId' je bil uspešno preimenovan";
         }
         else {
