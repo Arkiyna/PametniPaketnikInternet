@@ -12,7 +12,7 @@ function call($controller, $action) {
 
 $controllers = array('strani' => ['index','napaka'],
     'user' => ['prijava', 'odjava','registracija','shrani'],
-    'userPaketnik' => ['prikaziVse', 'prikaziPaketnik']);
+    'userPaketnik' => ['prikaziVse', 'prikaziPaketnik','dodajPaketnik','dodajPaketnikView']);
 
 
 

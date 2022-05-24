@@ -35,4 +35,31 @@ class UserPaketnik_controller
         $paketnik = json_decode($json_data);
         require_once('views/userPaketnik/prikaziPaketnik.php');
     }
+    public function dodajPaketnikView(){
+        require_once('views/userPaketnik/dodajPaketnik.php');
+    }
+    public function dodajPaketnik(){
+        $userId = $_SESSION["USER_ID"];
+        if($_POST["paketnikId"]!=""&&$_POST["nickname"]!="") {
+
+            $url = 'https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/uporabnikPaketnik';
+            $data = array('userId' => $userId, 'paketnikId' => $_POST["paketnikId"], 'name' => $_POST["nickname"]);
+            $options = array(
+                'http' => array(
+                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method' => 'POST',
+                    'content' => http_build_query($data)
+                )
+            );
+            $context = stream_context_create($options);
+            $result = file_get_contents($url, false, $context);
+            if ($result === FALSE) {
+                die();
+            }
+            $this->prikaziVse();
+        }
+        else{
+            echo "Registracijski podatki niso ustrezno izpolnjeni";
+        }
+    }
 }

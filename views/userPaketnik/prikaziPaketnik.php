@@ -5,11 +5,11 @@
 <a href="index.php"><button>Nazaj</button></a>
 
 <input type="button" name="changeName" value="Spremeni ime" onclick="onButtonClick()" />
+<input type="button" name="deletePaketnik" value="Zbriši paketnik" onclick="onButtonClickDelete()" />
 <div class="hide" id="hidden">
     <br />
     <input type="text" id="textInput" value="" />
     <input type="button" id="btn" value="Shrani" onclick="changeName()" />
-
 </div>
 <input class="hide" type="text" id="userId" value="<?php echo $_SESSION["USER_ID"] ?>" />
 <input class="hide" type="text" id="paketnikId" value="<?php echo $paketnik->paketnikId ?>" />
@@ -38,8 +38,31 @@
                 let res = await fetch(url);
                 return await res.json();
             } catch (error) {
+                window.location = 'index.php', true;
                 console.log(error);
             }
         }
+    function onButtonClickDelete() {
+
+        deletePaketnik();
+    }
+
+    async function deletePaketnik() {
+        var userId = document.getElementById("userId").value;
+        var paketnikId = document.getElementById("paketnikId").value;
+        let url = 'https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/uporabnikPaketnik/izbrisi/' + userId + "/" + paketnikId;
+        console.log(url);
+        try {
+            let res = await fetch(url);
+            return await res.json();
+
+        } catch (error) {
+            window.location = 'index.php', true;
+            console.log(error);
+        }
+    }
+</script>
+<script>
+
 </script>
 <hr />

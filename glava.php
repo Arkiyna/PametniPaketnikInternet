@@ -36,7 +36,7 @@
                     
                 ?>
                 <ul class="navbar-nav ms-auto">
-                    <li><a class="nav-link" href="index.php?controller=oglas&action=dodaj">Dodaj oglas</a></li>
+                    <li><a class="nav-link" href="index.php?controller=userPaketnik&action=dodajPaketnikView">Dodaj paketnik</a></li>
                 </ul>
                 </ul>
                 <ul class="navbar-nav nav navbar-right">
