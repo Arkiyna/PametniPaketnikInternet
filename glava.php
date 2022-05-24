@@ -40,7 +40,6 @@
                 </ul>
                 </ul>
                 <ul class="navbar-nav nav navbar-right">
-                    <li><a class="nav-link" href="index.php?controller=user&action=profil">Profil</a></li>
                     <li><a class="nav-link" href="index.php?controller=user&action=odjava">Odjava</a></li>
                 </ul>
             <?php
