@@ -11,7 +11,8 @@ function call($controller, $action) {
 
 
 $controllers = array('strani' => ['index','napaka'],
-    'user' => ['prijava', 'odjava','registracija','shrani']);
+    'user' => ['prijava', 'odjava','registracija','shrani'],
+    'userPaketnik' => ['prikaziVse', 'prikaziPaketnik']);
 
 
 

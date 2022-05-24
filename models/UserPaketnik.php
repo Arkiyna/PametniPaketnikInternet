@@ -38,6 +38,16 @@ class UserPaketnik {
         return -1;
     }
 
+    public static function getPaketnik($id) {
+        $db = Db::getInstance();
+        if($result = mysqli_query($db, "SELECT * FROM User_Paketnik WHERE id='$id'")) {
+            $row = $result->fetch_assoc();
+            $user = new UserPaketnik($row["userId"], $row["paketnikId"], $row["name"], $row["accessTil"], $row["isOwner"], $row["id"]);
+            return $user;
+        }
+        return -1;
+    }
+
     function isPaketnikOwner($userId, $paketnikId) {
         $db = Db::getInstance();
 
@@ -65,7 +75,7 @@ class UserPaketnik {
         }
     }
 
-    public function getUsersPackets($userId) {
+    public static function getUsersPackets($userId) {
         $db = Db::getInstance();
 
         $paketniki = array();
