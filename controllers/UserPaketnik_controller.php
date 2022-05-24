@@ -30,9 +30,15 @@ class UserPaketnik_controller
 
         // Read JSON file
         $json_data = file_get_contents($api_url);
-
         // Decode JSON data into PHP array
         $paketnik = json_decode($json_data);
+        $userId = $paketnik->userId;
+        $paketnikId = $paketnik->paketnikId;
+
+        $api_url = "https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/logs/zgodovinaOdklepov/$userId/$paketnikId";
+        $json_data = file_get_contents($api_url);
+        $zgodovina = json_decode($json_data);
+
         require_once('views/userPaketnik/prikaziPaketnik.php');
     }
     public function dodajPaketnikView(){

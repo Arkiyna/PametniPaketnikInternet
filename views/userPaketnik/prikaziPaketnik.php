@@ -41,6 +41,7 @@
                 window.location = 'index.php', true;
                 console.log(error);
             }
+            document.location.reload(true);
         }
     function onButtonClickDelete() {
 
@@ -66,3 +67,13 @@
 
 </script>
 <hr />
+
+<h3>Zgodovina odklepov</h3>
+<br />
+<?php
+foreach ($zgodovina as $data) {
+    $date = new DateTime($data->date);
+    echo "<p>" . $date->format('d.m.Y H:m:s') . "</p>";
+    echo "<br />";
+}
+?>
