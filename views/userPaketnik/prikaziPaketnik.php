@@ -1,3 +1,4 @@
+
 <h1><?php echo $paketnik->name; ?></h1>
 <p>ID paketnika: <?php echo $paketnik->paketnikId; ?></p>
 
@@ -95,8 +96,10 @@
 </script>
 <hr />
 
-<h3>Zgodovina odklepov</h3>
+
 <br />
+<div style="width: 50%; height: 50%; background-color: ; float:left;">
+    <h3>Zgodovina odklepov</h3>
 <?php
 foreach ($zgodovina as $data) {
     $date = new DateTime($data->date);
@@ -104,3 +107,14 @@ foreach ($zgodovina as $data) {
     echo "<br />";
 }
 ?>
+</div>
+<div style="width: 50%; height: 50%; background-color: ; float:right;">
+    <h3>Posojenci ključa</h3>
+    <?php
+    foreach ($borrowed as $data) {
+        echo "<p style='font-size:20px'>Ime uporabnika:  $data->name</p>";
+        echo "<button type='button' value=$data->userId class='btn btn-primary'>Odstrani</button>";
+        echo "<br /><br />";
+    }
+    ?>
+</div>

@@ -47,6 +47,20 @@ class UserPaketnik {
         }
         return -1;
     }
+    public static function getPaketnikBorrowed($id) {
+        $db = Db::getInstance();
+
+        $paketniki = array();
+
+        if($result = mysqli_query($db, "SELECT User_Paketnik.*,User.username FROM User_Paketnik INNER JOIN User ON User_Paketnik.userId=User.id WHERE paketnikId='$id' AND isOwner is FALSE")) {
+            while ($row = $result->fetch_assoc()) {
+                //v name se shrani username uporabnika
+                $paketnik = new UserPaketnik($row["userId"], $row["paketnikId"], $row["username"],$row["accessTil"], $row["isOwner"], $row["id"]);
+                array_push($paketniki, $paketnik);
+            }
+        }
+        return $paketniki;
+    }
 
     function isPaketnikOwner($userId, $paketnikId) {
         $db = Db::getInstance();

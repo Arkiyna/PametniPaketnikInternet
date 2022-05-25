@@ -89,6 +89,10 @@ if(isset($request[0])&&($request[0]=='uporabnikPaketnik')) {
                 $id = $request[2];
                 $paketnik = UserPaketnik::getPaketnik($id);
                 echo json_encode($paketnik);
+            } else if((isset($request[1]) && $request[1] == 'getPaketnikBorrowed')) {
+                $paketnikId = $request[2];
+                $paketniki = UserPaketnik::getPaketnikBorrowed($paketnikId);
+                echo json_encode($paketniki);
             } else if ((isset($request[1]) && $request[1] == 'izbrisi')) { //https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/uporabnikPaketnik/izbrisi/userId/paketnikId
                 if(isset($request[1]) && isset($request[2])) {
                     $userId = $request[2];
