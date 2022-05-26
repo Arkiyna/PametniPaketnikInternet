@@ -5,20 +5,37 @@ class UserPaketnik_controller
     public function prikaziVse() {
         $id = $_SESSION["USER_ID"];
         $api_url = "https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/uporabnikPaketnik/getAll/$id";
-
         // Read JSON file
         $json_data = file_get_contents($api_url);
 
         // Decode JSON data into PHP array
         $response_data = json_decode($json_data);
 
+        echo "<h2>Moji paketniki</h2>";
+        echo '<div style="margin: 0 20px">';
+
         foreach ($response_data as $data) {
             echo "<h3> $data->name </h3>";
+            echo '<div style="margin: 0 20px">';
             echo "<p>ID paketnika: $data->paketnikId</p>";
-            echo "<p>Dostop do: $data->accessTill</p>";
-            echo "<a href='index.php?controller=userPaketnik&action=prikaziPaketnik&id=$data->id'><button>Preberi več</button></a>";
+            if($data->isOwner == "1") {
+                echo "<p>Lastnik paketnika</p>";
+            }
+            else {
+                echo "<p>Paketnik v posoji</p>";
+            }
+            if ($data->accessTill == "9999-12-31 23:59:59") {
+                echo "<p>Neomejen dostop</p>";
+            }
+            else {
+                $date = new DateTime($data->accessTill);
+                echo "<p>Dostop do: " . date_format($date, 'd.m.Y H:i:s') . "</p>";
+            }
+            echo "<a href='index.php?controller=userPaketnik&action=prikaziPaketnik&id=$data->id'><button class='btn btn-primary'>Upravljaj s paketnikom</button></a>";
             echo "<br /> <br />";
+            echo "</div>";
         }
+        echo "</div>";
     }
 
     public function prikaziPaketnik() {
@@ -67,10 +84,28 @@ class UserPaketnik_controller
             );
             $context = stream_context_create($options);
             $result = file_get_contents($url, false, $context);
+
+            if ($result == '"Ta paketnik ze ima lastnika!"') {
+                echo '<div class="alert alert-danger alert-dismissible">
+                          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                          Ta paketnik že ima lastnika
+                      </div>';
+                $this->dodajPaketnikView();
+                die();
+            }
+            else if ($result == '"Uporabnik ze ima paketnik!"') {
+                echo '<div class="alert alert-danger alert-dismissible">
+                          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                          Uporabnik že ima paketnik
+                      </div>';
+                $this->dodajPaketnikView();
+                die();
+            }
+
             if ($result === FALSE) {
                 die();
             }
-            $this->prikaziVse();
+            //$this->prikaziVse();
         }
         else{
             echo "Registracijski podatki niso ustrezno izpolnjeni";

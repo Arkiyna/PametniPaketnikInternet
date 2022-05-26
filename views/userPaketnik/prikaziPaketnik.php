@@ -1,20 +1,33 @@
-
-<h1><?php echo $paketnik->name; ?></h1>
+<h2><?php echo $paketnik->name; ?></h2>
+<div style="margin: 0 20px">
 <p>ID paketnika: <?php echo $paketnik->paketnikId; ?></p>
+<?php
+    if($paketnik->isOwner == "1") {
+        echo "<p>Lastnik paketnika</p>";
+    }
+    else {
+        echo "<p>Paketnik v posoji</p>";
+    }
+    if ($paketnik->accessTill == "9999-12-31 23:59:59") {
+        echo "<p>Neomejen dostop</p>";
+    }
+    else {
+        $date = new DateTime($paketnik->accessTill);
+        echo "<p>Dostop do: " . date_format($date, 'd.m.Y H:i:s') . "</p>";
+    }
+?>
+<a href="index.php"><button class="btn btn-primary">Nazaj</button></a>
 
-<p>Dostop do: <?php echo $paketnik->accessTill; ?></p>
-<a href="index.php"><button>Nazaj</button></a>
-
-<input type="button" name="changeName" value="Spremeni ime" onclick="onButtonClick()" />
-<input type="button" name="deletePaketnik" value="Izbriši paketnik" onclick="onButtonClickDelete()" />
+<button class="btn btn-primary" type="button" name="changeName" onclick="onButtonClick()">Spremeni ime</button>
+<button class="btn btn-primary" type="button" name="deletePaketnik" onclick="onButtonClickDelete(<?php echo $_SESSION["USER_ID"] ?>, <?php echo $paketnik->paketnikId ?>)">Izbriši paketnik</button>
 <?php if ($paketnik->isOwner == "1") { ?>
-    <input type="button" name="posodiKljuc" value="Posodi ključ" onclick="onButtonClickPrikaziPosodiKljuc()" />
+    <button class="btn btn-primary" type="button" name="posodiKljuc" onclick="onButtonClickPrikaziPosodiKljuc()">Posodi ključ</button>
 <?php } ?>
 
 <div class="hide" id="hidden">
     <br />
     <input type="text" id="textInput" value="" />
-    <input type="button" id="btn" value="Shrani" onclick="changeName()" />
+    <button class="btn btn-primary" type="button" id="btn" onclick="changeName()">Shrani</button>
 </div>
 
 <div class="hide" id="hiddenPosodiKljuc">
@@ -32,16 +45,12 @@
                    min="<?php echo $tomorrow->format('Y-m-d'); ?>" max="9999-12-31">
             <br/>
             <br/>
-            <input class="btn btn-primary" type="submit" name="Dodaj" value="Potrdi"/>
+            <button class="btn btn-primary" type="submit" name="Dodaj">Potrdi</button>
         </div>
     </form>
-    <input type="button" id="btn" value="Posodi kljuc" onclick="posodiKljuc();" />
 </div>
-
-<input class="hide" type="text" id="userId" value="<?php echo $_SESSION["USER_ID"] ?>" />
-<input class="hide" type="text" id="paketnikId" value="<?php echo $paketnik->paketnikId ?>" />
-
 <br />
+</div>
 <style>
     .hide{
         display:none;
@@ -57,9 +66,9 @@
 
     async function changeName() {
         var name = document.getElementById("textInput").value;
-        var userId = document.getElementById("userId").value;
-        var paketnikId = document.getElementById("paketnikId").value;
-        let url = 'https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/uporabnikPaketnik/spremeniIme/' + userId + "/" + paketnikId + "/" + name;
+        var userId = <?php echo $_SESSION["USER_ID"] ?>;
+        var paketnikId = <?php echo $paketnik->paketnikId ?>;
+        let url = 'https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/uporabnikPaketnik/spremeniIme/' + <?php echo $_SESSION["USER_ID"] ?> + "/" + <?php echo $paketnik->paketnikId ?> + "/" + name;
         console.log(url);
         try {
             let res = await fetch(url);
@@ -70,13 +79,11 @@
         }
         document.location.reload(true);
     }
-    function onButtonClickDelete() {
-        deletePaketnik();
+    function onButtonClickDelete(userId, paketnikId) {
+        deletePaketnik(userId, paketnikId);
     }
 
-    async function deletePaketnik() {
-        var userId = document.getElementById("userId").value;
-        var paketnikId = document.getElementById("paketnikId").value;
+    async function deletePaketnik(userId, paketnikId) {
         let url = 'https://rain1.000webhostapp.com/PametniPaketnikInternet/api.php/uporabnikPaketnik/izbrisi/' + userId + "/" + paketnikId;
         console.log(url);
         try {
@@ -101,20 +108,23 @@
 <div style="width: 50%; height: 50%; background-color: ; float:left;">
     <h3>Zgodovina odklepov</h3>
 <?php
+echo "<div style='margin: 0 20px'>";
 foreach ($zgodovina as $data) {
     $date = new DateTime($data->date);
     echo "<p>" . $date->format('d.m.Y H:m:s') . "</p>";
-    echo "<br />";
 }
+echo "</div>"
 ?>
 </div>
 <div style="width: 50%; height: 50%; background-color: ; float:right;">
     <h3>Posojenci ključa</h3>
     <?php
+    echo "<div style='margin: 0 20px'>";
     foreach ($borrowed as $data) {
-        echo "<p style='font-size:20px'>Ime uporabnika:  $data->name</p>";
-        echo "<button type='button' value=$data->userId class='btn btn-primary'>Odstrani</button>";
-        echo "<br /><br />";
+        echo "<p style='font-size:20px'>Ime uporabnika:  $data->name</p>"; ?>
+        <button class="btn btn-primary" type="button" name="odvzamiDostop" onclick="onButtonClickDelete(<?php echo $data->userId ?>, <?php echo $paketnik->paketnikId ?>)">Odvzami dostop</button>
+        <?php echo "<br /><br />";
     }
+    echo "</div>"
     ?>
 </div>
