@@ -42,8 +42,12 @@ if(isset($request[0])&&($request[0]=='user')){
                 $user = new User( $input["username"], $input["password"],$input["email"]);
                 $user->dodaj();
             }
-            if (isset($input) && isset($request[1]) && $request[1] == 'login' ) {
+            else if (isset($input) && isset($request[1]) && $request[1] == 'login' ) {
                 $user = User::login($input["username"],$input["password"]);
+                echo json_encode($user);
+            }
+            else if (isset($input) && isset ($request[1]) && $request[1] == 'login_face') {
+                $user = User::login_face($input["username"]);
                 echo json_encode($user);
             }
     }
@@ -142,4 +146,3 @@ if(isset($request[0])&&($request[0]=='paketnik')) {
 //omgočimo zahtevo iz različnih domen
 //header("Access-Control-Allow-Origin: *");
 //izpišemo oglas, ki smo ga prej ustrezno nastavili
-

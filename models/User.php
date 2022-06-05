@@ -51,6 +51,15 @@ class User
                 return $user;
             }
         }
+    }
+    public static function login_face($username) {
+        $db = Db::getInstance();
 
+        if($result = mysqli_query($db, "SELECT * FROM User WHERE username='$username'")) {
+            while ($row = $result->fetch_assoc()) {
+                $user = new User($row["username"], $row["password"], $row["email"], $row["id"]);
+                return $user;
+            }
+        }
     }
 }
